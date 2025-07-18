@@ -1,8 +1,6 @@
 package com.example;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,27 +20,30 @@ public class SalesErrorInfoServlet extends HttpServlet {
         String startDateString = request.getParameter("startDate");
         String endDateString = request.getParameter("endDate");
 
-        JsonArrayBuilder itemsArrayBuilder = Json.createArrayBuilder();
-        for (String item : selectedItems) {
-            itemsArrayBuilder.add(item);
-        }
-
-        JsonArrayBuilder fruitsArrayBuilder = Json.createArrayBuilder();
-        for (String fruit : selectedFruits) {
-            fruitsArrayBuilder.add(fruit);
-        }
-        JsonObjectBuilder oBuilder = Json.createObjectBuilder()
-                .add("item",  itemsArrayBuilder.build())
-                .add("fruit", fruitsArrayBuilder.build())
-                .add("startDate", startDateString)
-                .add("endDate", endDateString)
-                ;
-
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            out.print(oBuilder.build().toString());
+            JsonObjectBuilder reqBuilder = Json.createObjectBuilder()
+                    .add("item",  array(selectedItems))
+                    .add("fruit", array(selectedFruits))
+                    .add("startDate", startDateString)
+                    .add("endDate", endDateString)
+                    ;
+            JsonObjectBuilder jsonBuilder = Json.createObjectBuilder()
+                    .add("REQUEST", reqBuilder.build())
+                    .add("RESPONSE", JsonValue.NULL)
+                    ;
+            out.print(jsonBuilder.build().toString());
             out.flush();
         }
     }
+
+    private JsonArray array(String[] items) {
+        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+        for (String item : items) {
+            arrayBuilder.add(item);
+        }
+        return arrayBuilder.build();
+    }
+
 }
