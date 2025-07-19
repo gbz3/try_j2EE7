@@ -8,7 +8,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 @RequestScoped
@@ -21,10 +20,9 @@ public class SalesErrorRepository {
 
     public List<SalesErrorEntity> findBy() {
         //TypedQuery<SalesErrorEntity> query = em.createNamedQuery("SalesErrorEntity.findAll", SalesErrorEntity.class);
-        //Query query = em.createNativeQuery("SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, BIRTH, JOB_ID, SALARY FROM EMPLOYEES", SalesErrorEntity.class);
-        Query query = em.createNativeQuery("SELECT 123 AS EMPLOYEE_ID FROM EMPLOYEES", SalesErrorEntity.class);
+        Query query = em.createNativeQuery("SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, BIRTH, JOB_ID, SALARY FROM EMPLOYEES", SalesErrorEntity.class);
         log.info("query: {}", query);
-        
+
         List<SalesErrorEntity> result = query.getResultList();
         log.info("result: {}", result);
 
