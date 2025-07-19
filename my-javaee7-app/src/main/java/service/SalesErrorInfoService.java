@@ -33,6 +33,10 @@ public class SalesErrorInfoService {
             List<SalesErrorInfoRecord> records = entities.stream()
                     .map(e -> SalesErrorInfoRecord.builder()
                             .registerId(e.getEmployeeId().toBigInteger())
+                            .firstName(e.getFirstName())
+                            .lastName(e.getLastName())
+                            .email(e.getEmail())
+                            .jobId(e.getJobId())
                             .build()
                     )
                     .collect(Collectors.toList());

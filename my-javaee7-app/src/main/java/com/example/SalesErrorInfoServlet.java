@@ -70,6 +70,10 @@ public class SalesErrorInfoServlet extends HttpServlet {
         for (SalesErrorInfoRecord record : records) {
             JsonObjectBuilder jsonBuilder = Json.createObjectBuilder()
                     .add("registerId", record.getRegisterId())
+                    .add("firstName", record.getFirstName())
+                    .add("lastName", record.getLastName())
+                    .add("email", record.getEmail())
+                    .add("jobId", record.getJobId())
                     ;
             arrayBuilder.add(jsonBuilder.build());
         }
