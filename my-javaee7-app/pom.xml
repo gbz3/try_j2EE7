@@ -15,6 +15,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
       <javaee.version>7.0</javaee.version>
+      <eclipselink.version>2.7.12</eclipselink.version>
       <lombok.version>1.18.38</lombok.version>
   </properties>
 
@@ -24,6 +25,12 @@
           <artifactId>javaee-web-api</artifactId>
           <version>${javaee.version}</version>
           <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.persistence</groupId>
+          <artifactId>eclipselink</artifactId>
+          <version>${eclipselink.version}</version> <!-- 使用するEclipseLinkのバージョンに合わせる -->
+          <scope>provided</scope> <!-- Java EEサーバーが提供する場合 -->
       </dependency>
       <dependency>
           <groupId>org.projectlombok</groupId>

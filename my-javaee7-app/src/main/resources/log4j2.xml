@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN"> <!-- ロガーの内部ステータスロギングレベル -->
+
+    <!-- Appenders: ログの出力先とフォーマットを定義 -->
+    <Appenders>
+        <!-- コンソール出力 (標準出力) -->
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <!-- ログのレイアウト (フォーマット) -->
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <!-- ファイル出力 (ログファイル) -->
+        <File name="FileAppender" fileName="logs/my-app.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+
+        <!-- ローリングファイル出力 (ログファイルのローテーション) -->
+        <RollingFile name="RollingFileAppender"
+                     fileName="logs/my-app-rolling.log"
+                     filePattern="logs/my-app-rolling-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <!-- 毎日ログファイルをローテーション -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <!-- ファイルサイズが10MBを超えたらローテーション -->
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!-- 保持する最大ファイル数 (例: 7日分) -->
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+    </Appenders>
+
+    <!-- Loggers: ログレベルとAppenderへの紐付けを定義 -->
+    <Loggers>
+        <!-- 特定のパッケージやクラスのロガー -->
+        <Logger name="com.example" level="debug" additivity="false">
+            <!-- このロガーのログはConsoleAppenderとRollingFileAppenderに出力 -->
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="RollingFileAppender"/>
+        </Logger>
+
+        <!-- 別のパッケージのロガー例 -->
+        <Logger name="db" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="RollingFileAppender"/>
+        </Logger>
+        <Logger name="service" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="RollingFileAppender"/>
+        </Logger>
+
+        <!-- SQLログの例 (JPA/HibernateなどのSQL出力をログに出す場合) -->
+        <!-- Payara (EclipseLink) のSQLログを詳細に出す場合 -->
+        <Logger name="org.eclipse.persistence.session.sql" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="RollingFileAppender"/>
+            <!--
+            <AppenderRef ref="FileAppender"/>
+            -->
+        </Logger>
+        <!-- または Hibernate のSQLログ -->
+        <!-- <Logger name="org.hibernate.SQL" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger>
+        <Logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger> -->
+
+        <!-- ルートロガー: 特定のロガーで定義されていないすべてのログを処理 -->
+        <Root level="info">
+            <!-- ルートロガーのログはConsoleAppenderに出力 -->
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
