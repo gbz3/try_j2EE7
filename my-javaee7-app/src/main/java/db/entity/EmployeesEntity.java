@@ -1,17 +1,21 @@
 package db.entity;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "EMPLOYEES")
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class EmployeesEntity {
 
@@ -42,5 +46,19 @@ public class EmployeesEntity {
 
     @Column(name = "SALARY")
     private Double salary;
+
+    public static EmployeesEntity buildFromRs(ResultSet rs) throws SQLException {
+        return builder()
+                .employeeId(rs.getInt("EMPLOYEE_ID"))
+                .firstName(rs.getString("FIRST_NAME"))
+                .lastName(rs.getString("LAST_NAME"))
+                .email(rs.getString("EMAIL"))
+                .phone(rs.getString("PHONE_NUMBER"))
+                .hireDate(rs.getDate("HIRE_DATE").toLocalDate())
+                .birth(rs.getInt("BIRTH"))
+                .jobId(rs.getString("JOB_ID"))
+                .salary(rs.getDouble("SALARY"))
+                .build();
+    }
 
 }

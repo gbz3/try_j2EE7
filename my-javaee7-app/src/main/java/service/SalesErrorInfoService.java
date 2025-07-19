@@ -10,6 +10,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
+import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,9 +43,12 @@ public class SalesErrorInfoService {
                     .resultCode(0)
                     .records(records)
                     .build();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error("SalesErrorInfoService::getSalesErrorInfo req={}", req, e);
-            throw e;
+            return SalesErrorInfoGetResponse.builder()
+                    .resultCode(-1)
+                    .records(Collections.emptyList())
+                    .build();
         }
     }
 
