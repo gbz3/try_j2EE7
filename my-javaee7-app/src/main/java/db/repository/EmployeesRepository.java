@@ -3,6 +3,7 @@ package db.repository;
 import db.entity.EmployeesEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import service.SalesErrorInfoGetRequest;
 
 import javax.enterprise.context.RequestScoped;
@@ -53,7 +54,7 @@ public class EmployeesRepository {
         }
     }
 
-    private void fillFruits(ConsumerWithSQLException<String> filler, SalesErrorInfoGetRequest request) throws SQLException {
+    private void fillFruits(ConsumerWithSQLException<String> filler, @NotNull SalesErrorInfoGetRequest request) throws SQLException {
         List<String> fruits = request.getFruits();
         String lastElement = fruits.isEmpty() ? "0" :  fruits.get(fruits.size() - 1);
         List<String> params = new ArrayList<>(fruits);

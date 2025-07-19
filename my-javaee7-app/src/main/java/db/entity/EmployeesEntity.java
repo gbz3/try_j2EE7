@@ -1,11 +1,13 @@
 package db.entity;
 
 import lombok.*;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -21,7 +23,7 @@ public class EmployeesEntity {
 
     @Id
     @Column(name = "EMPLOYEE_ID")
-    private Integer employeeId;
+    private BigDecimal employeeId;
 
     @Column(name = "FIRST_NAME")
     private String firstName;
@@ -47,9 +49,9 @@ public class EmployeesEntity {
     @Column(name = "SALARY")
     private Double salary;
 
-    public static EmployeesEntity buildFromRs(ResultSet rs) throws SQLException {
+    public static EmployeesEntity buildFromRs(@NotNull ResultSet rs) throws SQLException {
         return builder()
-                .employeeId(rs.getInt("EMPLOYEE_ID"))
+                .employeeId(rs.getBigDecimal("EMPLOYEE_ID"))
                 .firstName(rs.getString("FIRST_NAME"))
                 .lastName(rs.getString("LAST_NAME"))
                 .email(rs.getString("EMAIL"))

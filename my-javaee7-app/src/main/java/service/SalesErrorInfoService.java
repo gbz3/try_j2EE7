@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +32,7 @@ public class SalesErrorInfoService {
 
             List<SalesErrorInfoRecord> records = entities.stream()
                     .map(e -> SalesErrorInfoRecord.builder()
-                            .registerId(BigInteger.valueOf(e.getEmployeeId()))
+                            .registerId(e.getEmployeeId().toBigInteger())
                             .build()
                     )
                     .collect(Collectors.toList());
@@ -43,6 +42,7 @@ public class SalesErrorInfoService {
                     .resultCode(0)
                     .records(records)
                     .build();
+
         } catch (SQLException e) {
             log.error("SalesErrorInfoService::getSalesErrorInfo req={}", req, e);
             return SalesErrorInfoGetResponse.builder()
