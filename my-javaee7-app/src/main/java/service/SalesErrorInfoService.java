@@ -1,8 +1,8 @@
 package service;
 
 
-import db.entity.SalesErrorEntity;
-import db.repository.SalesErrorRepository;
+import db.entity.EmployeesEntity;
+import db.repository.EmployeesRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,18 +19,21 @@ public class SalesErrorInfoService {
     private static final Logger log = LogManager.getLogger();
 
     @Inject
-    private SalesErrorRepository salesErrorRepository;
+    private EmployeesRepository employeesRepository;
 
     @Transactional(Transactional.TxType.REQUIRED)
     public SalesErrorInfoGetResponse getSalesErrorInfo(SalesErrorInfoGetRequest req) {
         log.info("SalesErrorInfoService::getSalesErrorInfo req={}", req);
 
         try {
-            List<SalesErrorEntity> entities = salesErrorRepository.findBy();
+            List<EmployeesEntity> entities = employeesRepository.findBy(req);
             log.info("SalesErrorInfoService::getSalesErrorInfo entities={}", entities);
 
             List<SalesErrorInfoRecord> records = entities.stream()
-                    .map(e -> SalesErrorInfoRecord.builder().registerId(BigInteger.valueOf(e.getEmployeeId())).build())
+                    .map(e -> SalesErrorInfoRecord.builder()
+                            .registerId(BigInteger.valueOf(e.getEmployeeId()))
+                            .build()
+                    )
                     .collect(Collectors.toList());
             log.info("SalesErrorInfoService::getSalesErrorInfo records={}", records);
 
