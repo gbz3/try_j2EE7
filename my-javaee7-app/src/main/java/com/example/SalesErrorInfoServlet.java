@@ -75,6 +75,7 @@ public class SalesErrorInfoServlet extends HttpServlet {
                     .add("email", record.getEmail())
                     .add("birth", String.valueOf(record.getBirthDate()))
                     .add("jobId", record.getJobId())
+                    .add("managerId", record.getManagerId())
                     ;
             arrayBuilder.add(jsonBuilder.build());
         }

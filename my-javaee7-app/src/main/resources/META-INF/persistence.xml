@@ -21,7 +21,7 @@
             <!-- 開発時のみ推奨
             <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
             -->
-            <property name="eclipselink.logging.level" value="FINEST"/>
+            <property name="eclipselink.logging.level" value="FINE"/>
             <property name="eclipselink.logging.parameters" value="true"/>
             <property name="eclipselink.target-database" value="Oracle"/>
         </properties>

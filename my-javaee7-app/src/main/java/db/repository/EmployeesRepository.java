@@ -26,23 +26,33 @@ public class EmployeesRepository {
     private EntityManager em;
 
     private static final String SELECT_FROM = "SELECT"
-            + " EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, BIRTH, JOB_ID, SALARY"
+            + " EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, BIRTH, JOB_ID, SALARY, MANAGER_ID"
             + " FROM EMPLOYEES";
 
-    private static final String SQL_findByFruits = SELECT_FROM
-            + " WHERE JOB_ID IN (?, ?, ?, ?, ?)";
-
-    public List<EmployeesEntity> findBy(SalesErrorInfoGetRequest request) throws SQLException {
-        // EntityManager 管理下にあるためクローズはしない
+    public List<EmployeesEntity> findBy(@NotNull SalesErrorInfoGetRequest request) throws SQLException {
+        // EntityManager 管理下にあるためクローズしない
         Connection conn = em.unwrap(Connection.class);
         if (conn == null) {
             log.error("Connection obtained from database failed.");
             throw new IllegalStateException("Connection obtained from database failed.");
         }
 
+        String sql = SELECT_FROM + " WHERE JOB_ID IN (?, ?, ?, ?, ?)";
+        if (request.getItems() != null) {
+            sql = SELECT_FROM + " WHERE MANAGER_ID IN (?, ?, ?, ?) AND JOB_ID IN (?, ?, ?, ?, ?)";
+//        } else if (request.getStartDate() != null ||  request.getEndDate() != null) {
+//
+        }
+
         AtomicInteger paramIndex = new AtomicInteger(1);
-        try (PreparedStatement stmt = conn.prepareStatement(SQL_findByFruits)) {
-            fillFruits(s -> stmt.setString(paramIndex.getAndIncrement(), s), request);
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            if (request.getItems() != null) {
+                fillItems(request, aInt -> stmt.setInt(paramIndex.getAndIncrement(), aInt));
+            }
+            fillFruits(request, s -> stmt.setString(paramIndex.getAndIncrement(), s));
+
+            log.info("Executing SQL: {}", sql);
+            log.info("PreparedStatement {}", stmt);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 List<EmployeesEntity> result =  new ArrayList<>();
@@ -54,8 +64,24 @@ public class EmployeesRepository {
         }
     }
 
-    private void fillFruits(ConsumerWithSQLException<String> filler, @NotNull SalesErrorInfoGetRequest request) throws SQLException {
-        List<String> fruits = request.getFruits();
+    private void fillItems(SalesErrorInfoGetRequest req, ConsumerWithSQLException<Integer> filler) throws SQLException {
+        List<String> items = req.getItems();
+        int lastElement = items.isEmpty() ? -1 :  Integer.parseInt(items.get(items.size() - 1));
+        List<Integer> params = new ArrayList<>();
+        for (String item : items) {
+            params.add(Integer.parseInt(item));
+        }
+        while (params.size() < 4) {
+            params.add(lastElement);
+        }
+
+        for (Integer param : params) {
+            filler.accept(param);
+        }
+    }
+
+    private void fillFruits(SalesErrorInfoGetRequest req, ConsumerWithSQLException<String> filler) throws SQLException {
+        List<String> fruits = req.getFruits();
         String lastElement = fruits.isEmpty() ? "0" :  fruits.get(fruits.size() - 1);
         List<String> params = new ArrayList<>(fruits);
         while (params.size() < 5) {

@@ -38,6 +38,7 @@ public class SalesErrorInfoService {
                             .email(e.getEmail())
                             .birthDate(e.getBirth())
                             .jobId(e.getJobId())
+                            .managerId(e.getManagerId())
                             .build()
                     )
                     .collect(Collectors.toList());

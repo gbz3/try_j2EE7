@@ -29,4 +29,6 @@ public class SalesErrorInfoRecord {
 
     private String jobId;
 
+    private Integer managerId;
+
 }

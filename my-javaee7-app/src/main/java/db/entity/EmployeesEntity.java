@@ -49,6 +49,9 @@ public class EmployeesEntity {
     @Column(name = "SALARY")
     private Double salary;
 
+    @Column(name = "MANAGER_ID")
+    private Integer managerId;
+
     public static EmployeesEntity buildFromRs(@NotNull ResultSet rs) throws SQLException {
         return builder()
                 .employeeId(rs.getBigDecimal("EMPLOYEE_ID"))
@@ -60,6 +63,7 @@ public class EmployeesEntity {
                 .birth(convertToLocalDate(rs.getInt("BIRTH")))
                 .jobId(rs.getString("JOB_ID"))
                 .salary(rs.getDouble("SALARY"))
+                .managerId(rs.getInt("MANAGER_ID"))
                 .build();
     }
 
