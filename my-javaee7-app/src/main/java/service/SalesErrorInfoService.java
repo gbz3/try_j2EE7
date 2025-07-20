@@ -36,6 +36,7 @@ public class SalesErrorInfoService {
                             .firstName(e.getFirstName())
                             .lastName(e.getLastName())
                             .email(e.getEmail())
+                            .birthDate(e.getBirth())
                             .jobId(e.getJobId())
                             .build()
                     )

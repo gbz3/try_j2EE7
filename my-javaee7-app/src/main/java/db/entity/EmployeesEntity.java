@@ -41,7 +41,7 @@ public class EmployeesEntity {
     private LocalDate hireDate;
 
     @Column(name = "BIRTH")
-    private Integer birth;
+    private LocalDate birth;
 
     @Column(name = "JOB_ID")
     private String jobId;
@@ -57,10 +57,24 @@ public class EmployeesEntity {
                 .email(rs.getString("EMAIL"))
                 .phone(rs.getString("PHONE_NUMBER"))
                 .hireDate(rs.getDate("HIRE_DATE").toLocalDate())
-                .birth(rs.getInt("BIRTH"))
+                .birth(convertToLocalDate(rs.getInt("BIRTH")))
                 .jobId(rs.getString("JOB_ID"))
                 .salary(rs.getDouble("SALARY"))
                 .build();
+    }
+
+    public static LocalDate convertToLocalDate(Integer aInt) {
+        if (aInt == null) {
+            return null;
+        }
+        String strNumber = String.valueOf(aInt);
+        if (strNumber.length() < 7) {
+            return null;
+        }
+        int year = Integer.parseInt(strNumber.substring(0, 3)) + 1800;
+        int month = Integer.parseInt(strNumber.substring(3, 5));
+        int dayOfMonth = Integer.parseInt(strNumber.substring(5, 7));
+        return LocalDate.of(year, month, dayOfMonth);
     }
 
 }
