@@ -55,7 +55,7 @@ public class EmployeesRepository {
             log.info("PreparedStatement {}", stmt);
 
             try (ResultSet rs = stmt.executeQuery()) {
-                List<EmployeesEntity> result =  new ArrayList<>();
+                List<EmployeesEntity> result = new ArrayList<>();
                 while (rs.next()) {
                     result.add(EmployeesEntity.buildFromRs(rs));
                 }
@@ -66,7 +66,7 @@ public class EmployeesRepository {
 
     private void fillItems(SalesErrorInfoGetRequest req, ConsumerWithSQLException<Integer> filler) throws SQLException {
         List<String> items = req.getItems();
-        int lastElement = items.isEmpty() ? -1 :  Integer.parseInt(items.get(items.size() - 1));
+        int lastElement = items.isEmpty() ? -1 : Integer.parseInt(items.get(items.size() - 1));
         List<Integer> params = new ArrayList<>();
         for (String item : items) {
             params.add(Integer.parseInt(item));
@@ -82,7 +82,7 @@ public class EmployeesRepository {
 
     private void fillFruits(SalesErrorInfoGetRequest req, ConsumerWithSQLException<String> filler) throws SQLException {
         List<String> fruits = req.getFruits();
-        String lastElement = fruits.isEmpty() ? "0" :  fruits.get(fruits.size() - 1);
+        String lastElement = fruits.isEmpty() ? "0" : fruits.get(fruits.size() - 1);
         List<String> params = new ArrayList<>(fruits);
         while (params.size() < 5) {
             params.add(lastElement);
