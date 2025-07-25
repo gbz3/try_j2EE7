@@ -1,8 +1,10 @@
-# JavaEE7
+# try_j2EE7
 
-## 初期設定
+## JavaEE7
 
-### プロジェクト作成
+### 初期設定
+
+#### プロジェクト作成
 
 ```
 $ mvn archetype:generate \
@@ -16,3 +18,20 @@ $ vi pom.xml
 $
 ```
 
+## Java EE 8
+
+### 初期設定
+
+#### プロジェクト作成
+
+```
+$ mvn archetype:generate \
+    -DgroupId=com.example \
+    -DartifactId=my-javaee8-app \
+    -DarchetypeArtifactId=maven-archetype-webapp \
+    -DarchetypeVersion=1.4 \
+    -DinteractiveMode=false
+$ cd my-javaee8-app
+$ vi pom.xml
+$
+```
