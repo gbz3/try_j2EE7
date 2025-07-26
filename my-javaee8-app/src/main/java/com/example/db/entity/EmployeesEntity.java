@@ -1,14 +1,12 @@
 package com.example.db.entity;
 
+import com.example.db.converter.LocalDateIntConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -39,8 +37,9 @@ public class EmployeesEntity {
     @Column(name = "HIRE_DATE")
     private LocalDate hireDate;
 
-//    @Column(name = "BIRTH")
-//    private LocalDate birth;
+    @Column(name = "BIRTH")
+    @Convert(converter = LocalDateIntConverter.class)
+    private LocalDate birth;
 
     @Column(name = "JOB_ID")
     private String jobId;

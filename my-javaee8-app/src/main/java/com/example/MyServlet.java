@@ -72,7 +72,7 @@ public class MyServlet extends HttpServlet {
                     .add("firstName", record.getFirstName())
                     .add("lastName", record.getLastName())
                     .add("email", record.getEmail())
-                    //.add("birth", String.valueOf(record.getBirthDate()))
+                    .add("birth", String.valueOf(record.getBirth()))
                     .add("jobId", record.getJobId())
                     .add("managerId", record.getManagerId());
             arrayBuilder.add(jsonBuilder.build());
