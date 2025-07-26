@@ -29,14 +29,19 @@ public class MyServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
 
-        String birthStart = request.getParameter("birth-start");
-        String birthEnd = request.getParameter("birth-end");
 
-        EmployeeServiceRequest req = EmployeeServiceRequest.builder()
-                .birthStart(LocalDate.parse(birthStart))
-                .birthEnd(LocalDate.parse(birthEnd))
-                .build();
-        EmployeeServiceResponse res = employeeService.getEmployees(req);
+        EmployeeServiceRequest.EmployeeServiceRequestBuilder req = EmployeeServiceRequest.builder();
+
+        String birthStart = request.getParameter("birth-start");
+        if (birthStart != null && !birthStart.isEmpty()) {
+            req.birthStart(LocalDate.parse(birthStart));
+        }
+        String birthEnd = request.getParameter("birth-end");
+        if (birthEnd != null && !birthEnd.isEmpty()) {
+            req.birthEnd(LocalDate.parse(birthEnd));
+        }
+
+        EmployeeServiceResponse res = employeeService.getEmployees(req.build());
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

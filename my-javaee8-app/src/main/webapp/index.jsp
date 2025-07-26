@@ -34,12 +34,12 @@
 <form action="hello" method="post">
     <div class="form-group">
         <label for="startDate">開始日:</label>
-        <input type="date" id="startDate" name="birth-start" required value="2025-07-12">
+        <input type="date" id="startDate" name="birth-start" value="2025-07-12">
     </div>
 
     <div class="form-group">
         <label for="endDate">終了日:</label>
-        <input type="date" id="endDate" name="birth-end" required value="2025-07-17">
+        <input type="date" id="endDate" name="birth-end" value="2025-07-17">
     </div>
     <br>
     <input type="submit" value="送信">

@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,6 +32,18 @@ public class EmployeesRepository {
     public List<EmployeesEntity> findAll() {
 
         return findBy("SELECT e FROM EmployeesEntity e")
+                .collect(Collectors.toList());
+    }
+
+    public List<EmployeesEntity> findByBirth(LocalDate start, LocalDate end) {
+        TypedQuery<EmployeesEntity> query = em.createQuery(
+                "SELECT e FROM EmployeesEntity e WHERE e.birth BETWEEN :start AND :end",
+                EmployeesEntity.class
+        );
+        query.setParameter("start", start);
+        query.setParameter("end", end);
+
+        return query.getResultStream()
                 .collect(Collectors.toList());
     }
 

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.List;
 
 @RequestScoped
@@ -21,7 +22,7 @@ public class EmployeeService {
         log.info("Start: EmployeeService getEmployees req={}", req);
 
         try {
-            List<EmployeesEntity> entities = employeesRepository.findAll();
+            List<EmployeesEntity> entities = detectFind(req);
             return EmployeeServiceResponse.builder()
                     .resultCode("00")
                     .employees(entities)
@@ -29,6 +30,18 @@ public class EmployeeService {
         } finally {
             log.info("End: EmployeeService getEmployees");
         }
+    }
+
+    private List<EmployeesEntity> detectFind(EmployeeServiceRequest req) {
+        if (req == null) {
+            return employeesRepository.findAll();
+        } else if (req.getBirthStart() != null || req.getBirthEnd() != null) {
+            LocalDate startNonNull = req.getBirthStart() != null ? req.getBirthStart() : LocalDate.of(1, 1, 1);
+            LocalDate endNonNull = req.getBirthEnd() != null ? req.getBirthEnd() : LocalDate.of(9999, 12, 31);
+            return employeesRepository.findByBirth(startNonNull, endNonNull);
+        }
+
+        return employeesRepository.findAll();
     }
 
 }
