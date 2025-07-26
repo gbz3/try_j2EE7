@@ -1,5 +1,9 @@
 package com.example;
 
+import com.example.service.EmployeeService;
+import com.example.service.EmployeeServiceResponse;
+
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 import javax.servlet.annotation.WebServlet;
@@ -13,11 +17,16 @@ import java.io.PrintWriter;
 public class MyServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @Inject
+    private EmployeeService employeeService;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
 
         String birthStart = request.getParameter("birth-start");
         String birthEnd = request.getParameter("birth-end");
+
+        EmployeeServiceResponse res = employeeService.getEmployees();
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -28,9 +37,15 @@ public class MyServlet extends HttpServlet {
                     .add("birth-end", birthEnd)
                     ;
 
+            // RESPONSE
+            JsonObjectBuilder resBuilder = Json.createObjectBuilder()
+                    .add("resultCode", res.getResultCode())
+                    ;
+
             // ALL
             JsonObjectBuilder allBuilder = Json.createObjectBuilder()
                     .add("REQUEST", reqBuilder.build())
+                    .add("RESPONSE", resBuilder.build())
                     ;
 
             out.println(allBuilder.build());
