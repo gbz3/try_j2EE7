@@ -1,10 +1,14 @@
 package com.example;
 
+import com.example.db.entity.EmployeesEntity;
 import com.example.service.EmployeeService;
+import com.example.service.EmployeeServiceRequest;
 import com.example.service.EmployeeServiceResponse;
 
 import javax.inject.Inject;
 import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.util.List;
 
 @WebServlet("/hello")
 public class MyServlet extends HttpServlet {
@@ -26,7 +32,11 @@ public class MyServlet extends HttpServlet {
         String birthStart = request.getParameter("birth-start");
         String birthEnd = request.getParameter("birth-end");
 
-        EmployeeServiceResponse res = employeeService.getEmployees();
+        EmployeeServiceRequest req = EmployeeServiceRequest.builder()
+                .birthStart(LocalDate.parse(birthStart))
+                .birthEnd(LocalDate.parse(birthEnd))
+                .build();
+        EmployeeServiceResponse res = employeeService.getEmployees(req);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -40,6 +50,7 @@ public class MyServlet extends HttpServlet {
             // RESPONSE
             JsonObjectBuilder resBuilder = Json.createObjectBuilder()
                     .add("resultCode", res.getResultCode())
+                    .add("employees", listToJ(res.getEmployees()))
                     ;
 
             // ALL
@@ -51,6 +62,22 @@ public class MyServlet extends HttpServlet {
             out.println(allBuilder.build());
             out.flush();
         }
+    }
+
+    private JsonArray listToJ(List<EmployeesEntity> records) {
+        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+        for (EmployeesEntity record : records) {
+            JsonObjectBuilder jsonBuilder = Json.createObjectBuilder()
+                    .add("registerId", record.getEmployeeId())
+                    .add("firstName", record.getFirstName())
+                    .add("lastName", record.getLastName())
+                    .add("email", record.getEmail())
+                    //.add("birth", String.valueOf(record.getBirthDate()))
+                    .add("jobId", record.getJobId())
+                    .add("managerId", record.getManagerId());
+            arrayBuilder.add(jsonBuilder.build());
+        }
+        return arrayBuilder.build();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
