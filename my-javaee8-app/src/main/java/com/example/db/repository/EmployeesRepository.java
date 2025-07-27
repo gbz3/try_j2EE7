@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,13 +30,14 @@ public class EmployeesRepository {
         return em.createQuery(sql, EmployeesEntity.class).getResultStream();
     }
 
-    public List<EmployeesEntity> findAll() {
+    public List<EmployeesEntity> findAll(Predicate<EmployeesEntity> filter) {
 
         return findBy("SELECT e FROM EmployeesEntity e")
+                .filter(filter)
                 .collect(Collectors.toList());
     }
 
-    public List<EmployeesEntity> findByBirth(LocalDate start, LocalDate end) {
+    public List<EmployeesEntity> findByBirth(Predicate<EmployeesEntity> filter, LocalDate start, LocalDate end) {
         TypedQuery<EmployeesEntity> query = em.createQuery(
                 "SELECT e FROM EmployeesEntity e WHERE e.birth BETWEEN :start AND :end",
                 EmployeesEntity.class
@@ -44,6 +46,7 @@ public class EmployeesRepository {
         query.setParameter("end", end);
 
         return query.getResultStream()
+                .filter(filter)
                 .collect(Collectors.toList());
     }
 

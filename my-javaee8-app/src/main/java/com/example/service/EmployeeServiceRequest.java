@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Builder
@@ -14,5 +15,7 @@ public class EmployeeServiceRequest {
     private LocalDate birthStart;
 
     private LocalDate birthEnd;
+
+    private List<Integer> managerIds;
 
 }

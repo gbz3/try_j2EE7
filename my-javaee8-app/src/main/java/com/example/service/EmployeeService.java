@@ -9,6 +9,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Predicate;
 
 @RequestScoped
 public class EmployeeService {
@@ -34,14 +35,18 @@ public class EmployeeService {
 
     private List<EmployeesEntity> detectFind(EmployeeServiceRequest req) {
         if (req == null) {
-            return employeesRepository.findAll();
-        } else if (req.getBirthStart() != null || req.getBirthEnd() != null) {
-            LocalDate startNonNull = req.getBirthStart() != null ? req.getBirthStart() : LocalDate.of(1, 1, 1);
-            LocalDate endNonNull = req.getBirthEnd() != null ? req.getBirthEnd() : LocalDate.of(9999, 12, 31);
-            return employeesRepository.findByBirth(startNonNull, endNonNull);
+            return employeesRepository.findAll(e -> true);
         }
 
-        return employeesRepository.findAll();
+        Predicate<EmployeesEntity> filter = e -> req.getManagerIds().contains(e.getManagerId());
+
+        if (req.getBirthStart() != null || req.getBirthEnd() != null) {
+            LocalDate startNonNull = req.getBirthStart() != null ? req.getBirthStart() : LocalDate.of(1, 1, 1);
+            LocalDate endNonNull = req.getBirthEnd() != null ? req.getBirthEnd() : LocalDate.of(9999, 12, 31);
+            return employeesRepository.findByBirth(filter, startNonNull, endNonNull);
+        }
+
+        return employeesRepository.findAll(filter);
     }
 
 }

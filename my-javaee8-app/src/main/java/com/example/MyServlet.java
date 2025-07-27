@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/hello")
 public class MyServlet extends HttpServlet {
@@ -29,7 +31,6 @@ public class MyServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
 
-
         EmployeeServiceRequest.EmployeeServiceRequestBuilder req = EmployeeServiceRequest.builder();
 
         String birthStart = request.getParameter("birth-start");
@@ -40,6 +41,12 @@ public class MyServlet extends HttpServlet {
         if (birthEnd != null && !birthEnd.isEmpty()) {
             req.birthEnd(LocalDate.parse(birthEnd));
         }
+
+        req.managerIds(
+                Arrays.stream(request.getParameterValues("manager"))
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList())
+        );
 
         EmployeeServiceResponse res = employeeService.getEmployees(req.build());
 

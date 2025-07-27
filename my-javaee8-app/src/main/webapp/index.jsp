@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><html>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><html>
 <head>
     <meta charset="utf-8">
     <style>
@@ -28,6 +28,7 @@
             background-color: #0056b3;
         }
     </style>
+    <title>Test</title>
 </head>
 <body>
 <h2>Hello World!</h2>
@@ -36,11 +37,20 @@
         <label for="startDate">開始日:</label>
         <input type="date" id="startDate" name="birth-start" value="2025-07-12">
     </div>
-
     <div class="form-group">
         <label for="endDate">終了日:</label>
         <input type="date" id="endDate" name="birth-end" value="2025-07-17">
     </div>
+
+    <br>
+    <br>
+
+    <label><input type="checkbox" name="manager" value="1" checked>man-1<br></label>
+    <label><input type="checkbox" name="manager" value="2" checked>man-2<br></label>
+    <label><input type="checkbox" name="manager" value="3" checked>man-3<br></label>
+    <label><input type="checkbox" name="manager" value="4" checked>man-4<br></label>
+    <label><input type="checkbox" name="manager" value="5" checked>man-5<br></label>
+
     <br>
     <input type="submit" value="送信">
 </form>
