@@ -18,4 +18,6 @@ public class EmployeeServiceRequest {
 
     private List<Integer> managerIds;
 
+    private String firstName;
+
 }

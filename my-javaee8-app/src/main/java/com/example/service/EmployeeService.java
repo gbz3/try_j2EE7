@@ -34,11 +34,14 @@ public class EmployeeService {
     }
 
     private List<EmployeesEntity> detectFind(EmployeeServiceRequest req) {
+        Predicate<EmployeesEntity> filter = e -> true;
         if (req == null) {
-            return employeesRepository.findAll(e -> true);
+            return employeesRepository.findAll(filter);
         }
 
-        Predicate<EmployeesEntity> filter = e -> req.getManagerIds().contains(e.getManagerId());
+        Predicate<EmployeesEntity> hasManager = e -> req.getManagerIds().contains(e.getManagerId());
+        Predicate<EmployeesEntity> containsName = e -> e.getFirstName().contains(req.getFirstName());
+        filter = hasManager.and(containsName);
 
         if (req.getBirthStart() != null || req.getBirthEnd() != null) {
             LocalDate startNonNull = req.getBirthStart() != null ? req.getBirthStart() : LocalDate.of(1, 1, 1);

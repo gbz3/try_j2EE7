@@ -41,6 +41,10 @@ public class MyServlet extends HttpServlet {
         if (birthEnd != null && !birthEnd.isEmpty()) {
             req.birthEnd(LocalDate.parse(birthEnd));
         }
+        String firstName = request.getParameter("first-name");
+        if (firstName != null && !firstName.isEmpty()) {
+            req.firstName(firstName);
+        }
 
         req.managerIds(
                 Arrays.stream(request.getParameterValues("manager"))

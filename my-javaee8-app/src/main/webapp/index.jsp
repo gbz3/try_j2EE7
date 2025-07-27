@@ -52,6 +52,11 @@
     <label><input type="checkbox" name="manager" value="5" checked>man-5<br></label>
 
     <br>
+    <br>
+
+    <label><input type="text" name="first-name" value="まえ"></label>
+
+    <br>
     <input type="submit" value="送信">
 </form>
 </body>
